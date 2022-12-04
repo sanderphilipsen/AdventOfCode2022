@@ -17,7 +17,6 @@ namespace AdventOfCode.Days
             Console.WriteLine($"Elapsed time: {StopWatch.ElapsedTicks} ticks");
             StopWatch.Reset();
             Console.WriteLine("---------------------------------------------");
-
         }
 
         protected BaseDay(int day)
