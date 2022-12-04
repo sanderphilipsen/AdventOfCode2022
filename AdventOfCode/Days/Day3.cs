@@ -2,7 +2,7 @@
 {
     internal class Day3 : BaseDay
     {
-        public Day3() : base("Day 3")
+        public Day3() : base(3)
         {
         }
 

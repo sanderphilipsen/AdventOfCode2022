@@ -2,8 +2,9 @@
 {
     internal class Day1 : BaseDay
     {
-        public Day1() : base("Day 1")
+        internal Day1() : base(1)
         {
+
         }
 
         protected override void ExecuteDay()

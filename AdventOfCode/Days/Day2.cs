@@ -7,7 +7,7 @@
         private static readonly int[,] Points4GivenOpponentPlayAndResult = { { 3, 4, 8 }, { 1, 5, 9 }, { 2, 6, 7 } };
         private static readonly int[,] Points4GivenOpponentPlayAndMyPlays = { { 4, 8, 3 }, { 1, 5, 9 }, { 7, 2, 6 } };
 
-        public Day2() : base("Day 2")
+        internal Day2() : base(2)
         {
         }
 

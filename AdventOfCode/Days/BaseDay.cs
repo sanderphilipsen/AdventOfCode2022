@@ -4,23 +4,26 @@ namespace AdventOfCode.Days
 {
     public abstract class BaseDay
     {
-        public string Name { get; set; }
-        public Stopwatch StopWatch;
+        private int Day { get; set; }
+        private Stopwatch StopWatch;
         protected abstract void ExecuteDay();
 
-        public void Execute()
+        internal void Execute()
         {
+            Console.WriteLine($"Day{Day}:");
             StopWatch.Start();
             ExecuteDay();
             StopWatch.Stop();
             Console.WriteLine($"Elapsed time: {StopWatch.ElapsedTicks} ticks");
             StopWatch.Reset();
+            Console.WriteLine("---------------------------------------------");
+
         }
 
-        public BaseDay(string name)
+        protected BaseDay(int day)
         {
             StopWatch = new Stopwatch();
-            Name = name;
+            Day = day;
         }
     }
 }

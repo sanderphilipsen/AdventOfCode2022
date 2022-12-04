@@ -9,12 +9,7 @@ var days = new List<BaseDay>
 };
 
 foreach (var day in days)
-{
-    Console.WriteLine($"{day.Name}:");
-
     day.Execute();
-    Console.WriteLine("---------------------");
-}
 
 Console.WriteLine("Press any key to exit.");
 Console.ReadKey();
