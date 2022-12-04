@@ -21,15 +21,14 @@
                 var secondRange = ranges[1].Split('-');
                 var secondRangeEnd = int.Parse(secondRange[1]);
                 var secondRangeStart = int.Parse(secondRange[0]);
-                var overlappingFull = OverLapsFull(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd);
-                var overlapping = OverLaps(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd);
 
-                if (overlappingFull)
+                if (OverLapsFull(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
                     firstStarResult++;
 
-                if (overlapping)
+                if (OverLaps(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
                     secondStarResult++;
             }
+
             Console.WriteLine(firstStarResult);
             Console.WriteLine(secondStarResult);
         }
