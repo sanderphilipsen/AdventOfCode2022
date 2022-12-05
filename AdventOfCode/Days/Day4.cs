@@ -2,49 +2,36 @@
 {
     internal class Day4 : BaseDay
     {
-        internal Day4() : base(4)
+        internal Day4() : base(4, false)
         {
 
         }
 
-        protected override void ExecuteDay()
+        protected override void ExecuteDay(string[] lines, string[]? linesForB = null)
         {
-            var lines = Helpers.ReadInput(4);
-            var firstStarResult = 0;
-            var secondStarResult = 0;
             foreach (var line in lines)
             {
                 var ranges = line.Split(',');
                 var firstRange = ranges[0].Split('-');
-                var firstRangeStart = int.Parse(firstRange[0]);
-                var firstRangeEnd = int.Parse(firstRange[1]);
                 var secondRange = ranges[1].Split('-');
-                var secondRangeEnd = int.Parse(secondRange[1]);
-                var secondRangeStart = int.Parse(secondRange[0]);
-
-                if (OverLapsFull(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
-                    firstStarResult++;
-
-                if (OverLaps(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
-                    secondStarResult++;
+                CheckLine(int.Parse(firstRange[0]), int.Parse(firstRange[1]),
+                    int.Parse(secondRange[0]), int.Parse(secondRange[1]));
             }
-
-            Console.WriteLine(firstStarResult);
-            Console.WriteLine(secondStarResult);
+            PrintResults();
         }
-
-        private bool OverLapsFull(int start1, int end1, int start2, int end2)
+        private void CheckLine(int firstRangeStart, int firstRangeEnd, int secondRangeStart, int secondRangeEnd)
         {
-            if (start1 >= start2 && end1 <= end2)
-                return true;
-            if (start2 >= start1 && end2 <= end1)
-                return true;
-            return false;
+            if (OverLapsFull(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
+                FirstStarResult++;
+
+            if (OverLaps(firstRangeStart, firstRangeEnd, secondRangeStart, secondRangeEnd))
+                SecondStarResult++;
         }
 
-        private bool OverLaps(int start1, int end1, int start2, int end2)
-        {
-            return (Math.Max(0, Math.Min(end1, end2) - Math.Max(start1, start2) + 1)) > 0;
-        }
+        private static bool OverLapsFull(int start1, int end1, int start2, int end2)
+            => (start1 >= start2 && end1 <= end2) || (start2 >= start1 && end2 <= end1);
+
+        private static bool OverLaps(int start1, int end1, int start2, int end2)
+            => (Math.Max(0, Math.Min(end1, end2) - Math.Max(start1, start2) + 1)) > 0;
     }
 }

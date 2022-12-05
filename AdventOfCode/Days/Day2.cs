@@ -7,26 +7,22 @@
         private static readonly int[,] Points4GivenOpponentPlayAndResult = { { 3, 4, 8 }, { 1, 5, 9 }, { 2, 6, 7 } };
         private static readonly int[,] Points4GivenOpponentPlayAndMyPlays = { { 4, 8, 3 }, { 1, 5, 9 }, { 7, 2, 6 } };
 
-        internal Day2() : base(2)
+        internal Day2() : base(2, false)
         {
         }
 
-        protected override void ExecuteDay()
+        protected override void ExecuteDay(string[] lines, string[]? linesForB = null)
         {
-            var lines = Helpers.ReadInput(2);
-            var firstStar = GetMyResult(lines, Points4GivenOpponentPlayAndResult);
-            Console.WriteLine(firstStar);
-            var secondStar = GetMyResult(lines, Points4GivenOpponentPlayAndMyPlays);
-            Console.WriteLine(secondStar);
+            FirstStarResult = GetMyResult(lines, Points4GivenOpponentPlayAndResult);
+            SecondStarResult = GetMyResult(lines, Points4GivenOpponentPlayAndMyPlays);
+            PrintResults();
         }
 
-        private static int GetMyResult(string[] lines, int[,] matrix)
-        {
-            return lines.Sum(x =>
+        private static int GetMyResult(IEnumerable<string> lines, int[,] matrix)
+            => lines.Sum(x =>
             {
                 var input = x.Split(' ');
                 return matrix[HisPlays.FindIndex(input[0]), ExpectedResultOrMyPlays.FindIndex(input[1])];
             });
-        }
     }
 }

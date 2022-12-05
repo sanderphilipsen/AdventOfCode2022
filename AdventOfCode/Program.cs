@@ -2,14 +2,16 @@
 
 var days = new List<BaseDay>
 {
-    new Day1(),
-    new Day2(),
-    new Day3(),
-    new Day4()
+    new Day5(),
+
 };
 
 foreach (var day in days)
     day.Execute();
+
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine("----------------------------------------");
 
 Console.WriteLine("Press any key to exit.");
 Console.ReadKey();
