@@ -2,7 +2,7 @@
 
 namespace AdventOfCode.Days
 {
-    internal abstract class BaseDay
+    public abstract class BaseDay
     {
         private readonly int _day;
         private readonly Stopwatch _stopWatch;
@@ -10,6 +10,9 @@ namespace AdventOfCode.Days
 
         protected int FirstStarResult = 0;
         protected int SecondStarResult = 0;
+
+        protected string FirstStarResultAsString = "";
+        protected string SecondStarResultAsString = "";
 
         protected abstract void ExecuteDay(string[] lines, string[]? linesForB = null);
 
@@ -36,7 +39,7 @@ namespace AdventOfCode.Days
         {
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("         * ");
+            Console.Write("             * ");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write($"{FirstStarResult}");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -48,12 +51,28 @@ namespace AdventOfCode.Days
             Console.ResetColor();
         }
 
+        protected void PrintStringResults()
+        {
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("             * ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write($"{FirstStarResultAsString}");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write($"            ** ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{SecondStarResultAsString}");
+            Console.WriteLine();
+
+            Console.ResetColor();
+        }
+
         private void StopTimerPrintElapsedTicksAndResetTimer()
         {
             _stopWatch.Stop();
             Console.WriteLine();
 
-            Console.WriteLine($"         Elapsed time: {_stopWatch.ElapsedTicks} ticks");
+            Console.WriteLine($"            Elapsed time: {_stopWatch.ElapsedTicks} ticks");
 
             _stopWatch.Reset();
         }

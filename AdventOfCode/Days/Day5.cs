@@ -8,60 +8,61 @@
         {
             InitStack();
         }
+
         protected override void ExecuteDay(string[] lines, string[]? linesForB = null)
         {
-            FirsStar(lines);
+            Execute(lines);
             InitStack();
-            SecondStar(lines);
+            Execute(lines, false);
+            PrintStringResults();
         }
 
-        private void FirsStar(IEnumerable<string> lines)
+        private void Execute(IEnumerable<string> lines, bool lifo = true)
         {
-            var resultString = "";
             foreach (var line in lines)
             {
                 var lineInput = line.Split(' ');
                 var numberOfMoves = int.Parse(lineInput[1]);
 
-                for (var i = 0; i < numberOfMoves; i++)
-                {
-                    var took = _stacks[int.Parse(lineInput[3]) - 1].Pop();
-                    _stacks[int.Parse(lineInput[5]) - 1].Push(took);
-                }
+                if (!lifo)
+                    ProcessKeepOrder(numberOfMoves, lineInput);
+                else
+                    ProcessLifo(numberOfMoves, lineInput);
             }
-            for (var i = 0; i < _stacks.Length; i++)
-            {
-                var took = _stacks[i].Pop();
-                resultString += took;
-            }
-            Console.WriteLine(resultString);
+            FormResult(lifo);
         }
 
-        private void SecondStar(IEnumerable<string> lines)
+        private void FormResult(bool lifo = true)
         {
-            var resultString = "";
-            foreach (var line in lines)
-            {
-                var lineInput = line.Split(' ');
-                var numberOfMoves = int.Parse(lineInput[1]);
-
-                var toAdd = new List<char>();
-
-                for (var i = 0; i < numberOfMoves; i++)
-                    toAdd.Add(_stacks[int.Parse(lineInput[3]) - 1].Pop());
-
-                toAdd.Reverse();
-
-                foreach (var add in toAdd)
-                    _stacks[int.Parse(lineInput[5]) - 1].Push(add);
-
-                toAdd.Clear();
-            }
+            var result = "";
 
             for (var i = 0; i < _stacks.Length; i++)
-                resultString += _stacks[i].Pop();
+                result += _stacks[i].Pop();
 
-            Console.WriteLine(resultString);
+            if (lifo)
+                FirstStarResultAsString = result;
+            else
+                SecondStarResultAsString = result;
+        }
+
+
+        private void ProcessKeepOrder(int numberOfMoves, IReadOnlyList<string> lineInput)
+        {
+            var toAdd = new List<char>();
+
+            for (var i = 0; i < numberOfMoves; i++)
+                toAdd.Add(_stacks[int.Parse(lineInput[3]) - 1].Pop());
+
+            toAdd.Reverse();
+
+            foreach (var add in toAdd)
+                _stacks[int.Parse(lineInput[5]) - 1].Push(add);
+        }
+
+        private void ProcessLifo(int numberOfMoves, IReadOnlyList<string> lineInput)
+        {
+            for (var i = 0; i < numberOfMoves; i++)
+                _stacks[int.Parse(lineInput[5]) - 1].Push(_stacks[int.Parse(lineInput[3]) - 1].Pop());
         }
 
         private void InitStack()
@@ -77,7 +78,7 @@
             _stacks[8] = FillStack('d', 's', 'c', 'n', 'l', 'p', 'h');
         }
 
-        private Stack<char> FillStack(params char[] letters)
+        private static Stack<char> FillStack(params char[] letters)
         {
             var result = new Stack<char>();
             foreach (var letter in letters)

@@ -5,7 +5,9 @@
         public static string[] ReadInput(int day, bool b = false)
         => File.ReadAllLines($@"C:\Users\sphilipsen\source\repos\AdventOfCode\AdventOfCode\Inputs\day{day}{(b ? "b" : "")}.txt");
 
-        public static int FindIndex<T>(this T[] array, T item)
+        public static int FindIndex<T>(this string[] array, T item)
         => Array.FindIndex(array, val => val.Equals(item));
+
+
     }
 }
