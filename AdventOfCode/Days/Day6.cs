@@ -9,31 +9,20 @@
 
         protected override void ExecuteDay(string[] lines, string[]? linesForB = null)
         {
-            ExecuteStar(lines, 4);
-            ExecuteStar(lines, 14);
+            FirstStarResult = ExecuteStar(lines[0].ToCharArray(), 4);
+            SecondStarResult = ExecuteStar(lines[0].ToCharArray(), 14);
             PrintResults();
         }
 
-        private void ExecuteStar(string[] lines, int numberOfUniques)
+        private int ExecuteStar(IReadOnlyList<char> chars, int numberOfUniques)
         {
-            var chars = lines[0].ToCharArray();
-            for (var i = 0; i < chars.Length; i++)
+            for (var i = 0; i < chars.Count; i++)
             {
-                var list = new List<char>();
-                for (int x = 0; x < numberOfUniques; x++)
-                    list.Add(chars[i + x]);
-
-                if (list.Distinct().Count() != numberOfUniques)
+                if (chars.Skip(i).Take(numberOfUniques).Distinct().Count() != numberOfUniques)
                     continue;
-
-                if (numberOfUniques == 14)
-                    SecondStarResult = i + numberOfUniques;
-                else if (numberOfUniques == 4)
-                    FirstStarResult = i + numberOfUniques;
-
-                break;
-
+                return i + numberOfUniques;
             }
+            return 0;
         }
     }
 }
