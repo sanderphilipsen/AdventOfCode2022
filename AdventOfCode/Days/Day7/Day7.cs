@@ -4,18 +4,15 @@
     {
 
         private Directory _currentDirectory;
-        private List<Directory> directories;
-        private int capacity = 70000000;
-        private int totalUsed = 0;
-        private int updateRequiredSpace = 30000000;
-        private int spaceToMakeFree = 0;
-
+        private readonly List<Directory> _directories;
+        private const int Capacity = 70000000;
+        private const int UpdateRequiredSpace = 30000000;
+        private int _spaceToMakeFree = 0;
 
         public Day7() : base(7, false)
         {
-            directories = new List<Directory>();
-            _currentDirectory = new Directory(null).SetUniqueName("root", null).SetLevel(0);
-            directories.Add(_currentDirectory);
+            _currentDirectory = new Directory(null).SetName("root");
+            _directories = new List<Directory> { _currentDirectory };
         }
 
         protected override void ExecuteDay(string[] lines, string[]? linesForB = null)
@@ -23,11 +20,12 @@
             foreach (var line in lines)
             {
                 var input = line.Split(" ");
-                if (input[0] == "$")
+
+                if (input[0] is "$")
                     ProcessCommand(input);
                 else if (int.TryParse(input[0], out var size))
                     ProcessFile(size, input[1]);
-                else if (input[0] == "dir")
+                else if (input[0] is "dir")
                     ProcessDir(input[1]);
             }
 
@@ -39,84 +37,85 @@
 
         private void CalculateFirsStarResult()
         {
-            foreach (var directory in directories)
+            FirstStarResult = _directories.Sum(x =>
             {
-                var dirSize = directory.GetDirectorySize();
-                if (dirSize <= 100000)
-                    FirstStarResult += dirSize;
-            }
+                var dirSize = x.GetDirectorySize();
+                return dirSize <= 100000 ? dirSize : 0;
+            });
 
-            _currentDirectory = directories.Single(x => x.Name == "root");
-            this.spaceToMakeFree = (_currentDirectory.GetDirectorySize() + updateRequiredSpace) - capacity;
-
+            _currentDirectory = _directories.Single(x => x.Name == "root");
+            _spaceToMakeFree = (_currentDirectory.GetDirectorySize() + UpdateRequiredSpace) - Capacity;
         }
 
         private void CalculateSecondStarResult()
         {
-            var bestSolution = capacity;
-            foreach (var directory in directories)
+            var bestSolution = Capacity;
+            foreach (var directory in _directories)
             {
                 var dirSize = directory.GetDirectorySize();
-                var res = dirSize - spaceToMakeFree;
-                if (res >= 0 && res < bestSolution)
-                {
-                    bestSolution = res;
-                    SecondStarResult = dirSize;
-                }
+                var res = dirSize - _spaceToMakeFree;
+
+                if (!(res >= 0 && res < bestSolution))
+                    return;
+
+                bestSolution = res;
+                SecondStarResult = dirSize;
             }
         }
-        protected void ProcessCommand(string[] input)
-        {
-            if (input[1] == "ls")
-                return;
-            if (input[1] == "cd")
-                ProcessCd(input[2]);
 
+        private void ProcessCommand(IReadOnlyList<string> input)
+        {
+            if (input[1] is "ls")
+                return;
+            if (input[1] is "cd")
+                ProcessCd(input[2]);
         }
-        protected void ProcessCd(string cdTo)
+
+        private void ProcessCd(string cdTo)
         {
             switch (cdTo)
             {
                 case "/":
-                    _currentDirectory = directories.Single(x => x.Name == "root");
+                    _currentDirectory = _directories.Single(x => x.Name == "root");
                     break;
                 case "..":
                     _currentDirectory = _currentDirectory.Parent ?? throw new InvalidOperationException();
                     break;
                 default:
                     {
-                        var dir = directories.Where(x => x.Name == cdTo).SingleOrDefault(x => x.Parent.IsSameDirectory(_currentDirectory));
+                        var dir = _directories.Where(x => x.Name == cdTo).SingleOrDefault(x => x.Parent is not null && x.Parent.IsSameDirectory(_currentDirectory));
                         if (dir is null)
                         {
-                            dir = new Directory(_currentDirectory).SetUniqueName(cdTo, null);
-                            directories.Add(dir);
+                            dir = new Directory(_currentDirectory).SetName(cdTo);
+                            _directories.Add(dir);
                         }
-
                         _currentDirectory = dir;
                     }
                     break;
             }
         }
 
-        protected void ProcessDir(string name)
+        private void ProcessDir(string name)
         {
-            var dir = directories.Where(x => x.Name == name).SingleOrDefault(x => x.Parent.IsSameDirectory(_currentDirectory));
-            if (dir is null)
-            {
-                dir = new Directory(_currentDirectory).SetUniqueName(name, null);
-                _currentDirectory.AddDirectory(dir);
-                directories.Add(dir);
-            }
+            var dir = _directories.Where(x => x.Name == name).SingleOrDefault(x => x.Parent is not null && x.Parent.IsSameDirectory(_currentDirectory));
+            if (dir is not null)
+                return;
+
+            dir = new Directory(_currentDirectory).SetName(name);
+            _currentDirectory.AddDirectory(dir);
+            _directories.Add(dir);
+
         }
 
         protected void ProcessFile(int size, string name)
         {
             var file = _currentDirectory.Files.SingleOrDefault(x => x.Name == name);
-            if (file is null)
-            {
-                file = new File(name).SetSize(size);
-                _currentDirectory.AddFile(file);
-            }
+            if (file is not null)
+                return;
+
+            file = new File(name).SetSize(size);
+            _currentDirectory.AddFile(file);
+
         }
     }
 }

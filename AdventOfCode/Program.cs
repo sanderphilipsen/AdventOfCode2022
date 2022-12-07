@@ -13,6 +13,10 @@ do
     Console.Write("Enter the days you want to execute: ");
     var input = Console.ReadLine();
     var days = new List<BaseDay>();
+
+    if (input is null)
+        return;
+
     foreach (var dayInput in input)
     {
         var legalInput = int.TryParse(dayInput.ToString(), out var enteredDay);

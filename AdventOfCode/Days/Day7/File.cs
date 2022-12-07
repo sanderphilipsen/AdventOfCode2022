@@ -2,7 +2,7 @@
 {
     internal class File
     {
-        public string Name { get; private set; }
+        public string Name { get; init; }
         public int Size { get; private set; }
 
         public File(string name)

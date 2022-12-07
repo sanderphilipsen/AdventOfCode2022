@@ -8,8 +8,6 @@
 
         public Directory? Parent { get; init; }
 
-        public int Level { get; private set; }
-
         public Directory(Directory? parent)
         {
             Files = new List<File>();
@@ -23,15 +21,10 @@
             Files.Add(file);
             return this;
         }
-        public Directory SetUniqueName(string name, Directory? parentDir)
-        {
-            Name = name + parentDir?.Name;
-            return this;
-        }
 
-        public Directory SetLevel(int level)
+        public Directory SetName(string name)
         {
-            Level = level;
+            Name = name;
             return this;
         }
 
@@ -43,16 +36,7 @@
 
         public int GetDirectorySize()
         {
-            var size = 0;
-            foreach (var file in Files)
-                size += file.Size;
-
-            if (Directories.Count > 0)
-            {
-                foreach (var dir in Directories)
-                    size += dir.GetDirectorySize();
-            }
-            return size;
+            return Files.Sum(x => x.Size) + Directories.Sum(x => x.GetDirectorySize());
         }
 
         public bool IsSameDirectory(Directory other)
@@ -65,8 +49,7 @@
             public bool Equals(Directory x, Directory y)
             {
                 if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null)) return false;
-                if (ReferenceEquals(y, null)) return false;
+
                 if (x.GetType() != y.GetType()) return false;
                 return x.Name == y.Name && x.Files.Equals(y.Files) && x.Directories.Equals(y.Directories) && Equals(x.Parent, y.Parent);
             }
