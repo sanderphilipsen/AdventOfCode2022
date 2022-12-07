@@ -14,7 +14,7 @@
             PrintResults();
         }
 
-        private int ExecuteStar(IReadOnlyList<char> chars, int numberOfUniques)
+        private static int ExecuteStar(IReadOnlyList<char> chars, int numberOfUniques)
         {
             for (var i = 0; i < chars.Count; i++)
             {
