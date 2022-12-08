@@ -1,5 +1,6 @@
 ﻿using AdventOfCode.Days;
 using AdventOfCode.Days.Day7;
+using AdventOfCode.Days.Day8;
 
 namespace AdventOfCode
 {
