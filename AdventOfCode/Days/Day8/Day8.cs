@@ -5,6 +5,7 @@
         private int[,] _forest;
         private int _totalOnYAs;
         private int _totalOnXAs;
+
         public Day8() : base(8, false)
         {
 
@@ -42,7 +43,7 @@
                     if (i == 0 || j == 0 || i == _totalOnYAs - 1 || j == _totalOnXAs - 1 || IsVisible(j, i))
                         FirstStarResult++;
 
-                    GetDistanceViewScore(j, i);
+                    CheckIfTreeHasHighestViewScore(j, i);
                 }
             }
         }
@@ -52,43 +53,44 @@
             var invisibleFromSidesCounter = 0;
             for (var i = 0; i < x; i++)
             {
-                if (_forest[y, i] >= _forest[y, x])
-                {
-                    invisibleFromSidesCounter++;
-                    break;
-                }
+                if (_forest[y, i] < _forest[y, x])
+                    continue;
+
+                invisibleFromSidesCounter++;
+                break;
             }
+
             for (var i = _totalOnXAs - 1; i > x; i--)
             {
-                if (_forest[y, i] >= _forest[y, x])
-                {
-                    invisibleFromSidesCounter++;
-                    break;
-                }
+                if (_forest[y, i] < _forest[y, x])
+                    continue;
+
+                invisibleFromSidesCounter++;
+                break;
             }
 
             for (var i = 0; i < y; i++)
             {
-                if (_forest[i, x] >= _forest[y, x])
-                {
-                    invisibleFromSidesCounter++;
-                    break;
-                }
+                if (_forest[i, x] < _forest[y, x])
+                    continue;
+
+                invisibleFromSidesCounter++;
+                break;
             }
 
             for (var i = _totalOnYAs - 1; i > y; i--)
             {
-                if (_forest[i, x] >= _forest[y, x])
-                {
-                    invisibleFromSidesCounter++;
-                    break;
-                }
+                if (_forest[i, x] < _forest[y, x])
+                    continue;
+
+                invisibleFromSidesCounter++;
+                break;
             }
 
             return invisibleFromSidesCounter != 4;
         }
 
-        private void GetDistanceViewScore(int x, int y)
+        private void CheckIfTreeHasHighestViewScore(int x, int y)
         {
             var distanceScore = 0;
             var leftScore = 0;
