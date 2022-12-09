@@ -1,6 +1,7 @@
 ﻿using AdventOfCode.Days;
 using AdventOfCode.Days.Day7;
 using AdventOfCode.Days.Day8;
+using AdventOfCode.Days.Day9;
 
 namespace AdventOfCode
 {
@@ -27,7 +28,7 @@ namespace AdventOfCode
                 case 8:
                     return new Day8();
                 case 9:
-                    return new Day1();
+                    return new Day9();
                 case 10:
                     return new Day1();
                 case 11:
